@@ -36,3 +36,24 @@ getLoginR = do
 autenticar :: Text -> Text -> HandlerT App IO (Maybe (Entity Usuario))
 autenticar email senha = runDB $ selectFirst [UsuarioEmail ==. email
                                              ,UsuarioSenha ==. senha] []
+
+postLoginR :: Handler Html 
+postLoginR = do 
+    ((res,_),_) <- runFormPost formLogin
+    case res of
+        FormSuccess ("root@root.com","root") -> do 
+            setSession "_USR" (pack (show $ Usuario "admin" "" ""))
+            redirect HomeR
+        FormSuccess (email,senha) -> do 
+            talvezUsuario <- autenticar email senha 
+            case talvezUsuario of 
+                Nothing -> do 
+                    setMessage [shamlet| 
+                        <h1> 
+                            Usuario nao cadastrado/Senha inválida 
+                    |]
+                    redirect LoginR
+                Just (Entity uid (Usuario n e _)) -> do 
+                    setSession "_USR" (pack (show $ Usuario n e ""))
+                    redirect HomeR
+        _ -> redirect HomeR
