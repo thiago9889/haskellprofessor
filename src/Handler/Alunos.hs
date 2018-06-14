@@ -50,3 +50,20 @@ postAlunosR cid = do
             aid <- runDB $ insert $ Alunos nome Nothing cid
             redirect (PerfilR aid)
         _ -> redirect HomeR
+
+getPerfilR :: AlunosId -> Handler Html
+getPerfilR aid = do 
+    alunos <- runDB $ get404 aid
+    imagem <- return $ alunosImagem alunos
+    staticDir <- return $ "../../static/"
+    defaultLayout $ do 
+        toWidget $(luciusFile "templates/home.lucius")
+        $(whamletFile "templates/menu.hamlet")
+        [whamlet|
+            <h2>
+                Nome: #{alunosNome alunos}
+            <p>
+                $maybe img <- imagem 
+                    <img src=#{staticDir ++ img}>
+
+        |]
