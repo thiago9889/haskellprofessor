@@ -67,3 +67,8 @@ getPerfilR aid = do
                     <img src=#{staticDir ++ img}>
 
         |]
+
+postPerfilR :: AlunosId -> Handler Html
+postPerfilR aid = do 
+    runDB $ delete aid 
+    redirect ListaAlunosRs
