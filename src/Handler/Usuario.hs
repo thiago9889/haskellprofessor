@@ -31,3 +31,32 @@ getCadUsuarioR = do
                 <br>
                 <input type="submit" value="OK">
         |]
+
+        postPerfilUsuarioR :: UsuarioId -> Handler Html
+        postPerfilUsuarioR uid = do
+            runDB $ delete uid
+            redirect ListaUsuarioR
+
+        postCadUsuarioR :: Handler Html
+        postCadUsuarioR = do
+            ((result,_),_) <- runFormPost formUsuario
+            case result of
+                FormSuccess usu -> do
+                    uid <- runDB $ insert usu
+                    redirect (PerfilUsuarioR uid)
+                _ -> redirect HomeR
+
+
+        getPerfilUsuarioR :: UsuarioId -> Handler Html
+        getPerfilUsuarioR uid = do
+            usu <- runDB $ get404 uid
+            defaultLayout $ do
+                toWidget $(luciusFile "templates/home.lucius")
+                $(whamletFile "templates/menu.hamlet")
+                [whamlet|
+                    <h2>
+                        Nome: #{usuarioNome usu}
+
+                    <p>
+                        E-mail: #{usuarioEmail usu}
+                |]
