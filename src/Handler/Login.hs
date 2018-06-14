@@ -57,3 +57,18 @@ postLoginR = do
                     setSession "_USR" (pack (show $ Usuario n e ""))
                     redirect HomeR
         _ -> redirect HomeR
+
+getLogoutR :: Handler Html
+getLogoutR = do 
+    deleteSession "_USR"
+    redirect HomeR
+
+getAdminR :: Handler Html 
+getAdminR = do 
+    defaultLayout $ do
+        toWidget $(luciusFile "templates/home.lucius") 
+        [whamlet|
+            <h1> BEM VINDO ADMIN!
+            <form action=@{LogoutR} method=post>
+                <input type="submit" value="Logout">
+        |]
