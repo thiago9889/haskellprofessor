@@ -60,3 +60,38 @@ getCadUsuarioR = do
                     <p>
                         E-mail: #{usuarioEmail usu}
                 |]
+
+
+                getListaUsuarioR :: Handler Html
+                getListaUsuarioR = do
+                    usuarios <- runDB $ selectList [] [Asc UsuarioNome]
+                    defaultLayout $ do
+                        toWidget $(luciusFile "templates/home.lucius")
+                        $(whamletFile "templates/menu.hamlet")
+                        [whamlet|
+                            <h2>
+                                Lista de Professores
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Nome
+
+                                        <th>
+                                            Email
+
+                                        <th>
+
+                                <tbody>
+                                    $forall (Entity uid usuario) <- usuarios
+                                        <tr>
+                                            <td>
+                                                <a href=@{PerfilUsuarioR uid}>
+                                                    #{usuarioNome usuario}
+                                            <td>
+                                                <a href=@{PerfilUsuarioR uid}>
+                                                    #{usuarioEmail usuario}
+                                            <td>
+                                                <form action=@{PerfilUsuarioR uid} method=post>
+                                                    <input type="submit" value="Apagar">
+                        |]
