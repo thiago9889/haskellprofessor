@@ -34,3 +34,12 @@ postPerfilNivelbR :: NivelbId -> Handler Html
 postPerfilNivelbR nid = do 
     runDB $ delete nid 
     redirect ListaNivelbR
+
+postCadNivelbR :: Handler Html
+postCadNivelbR = do 
+    ((result,_),_) <- runFormPost formNivelb
+    case result of
+        FormSuccess niv -> do 
+            nid <- runDB $ insert niv 
+            redirect (PerfilNivelbR nid)
+        _ -> redirect HomeR
