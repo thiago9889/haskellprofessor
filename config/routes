@@ -13,6 +13,15 @@
 /perfilusuario/#UsuarioId PerfilUsuarioR   GET POST
 /lista/usuarios            ListaUsuarioR   GET
 
+/nivelb/cadastrar         CadNivelbR      GET POST
+/perfilnivelb/#NivelbId PerfilNivelbR   GET POST
+/lista/niveis            ListaNivelbR   GET
+/listacapitulonivel/#NivelbId ListaCapitulonivelbR   GET
+
+/cadastrarcapitulo/#NivelbId CadCapituloR      GET POST
+!/perfilcapitulo/#CapituloId PerfilCapituloR   GET POST
+/lista/capitulos            ListaCapituloR   GET
+
 /login                     LoginR           GET POST
 /logout                    LogoutR          GET
 /admin                     AdminR           GET
