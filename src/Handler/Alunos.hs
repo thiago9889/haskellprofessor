@@ -36,3 +36,17 @@ getAlunosR cid = do
                 <br>
                 <input type="submit" value="OK">
         |]
+
+postAlunosR :: CapituloId -> Handler Html
+postAlunosR cid = do 
+    -- LEIO OS PARAMETROS DO FORM
+    ((res,_),_) <- runFormPost formAlunos
+    case res of
+        FormSuccess (nome,Just arq, cid) -> do 
+            aid <- runDB $ insert $ Alunos nome (Just $ (fileName arq)) cid
+            liftIO $ fileMove arq ("static/" ++ (unpack $ fileName arq))
+            redirect (PerfilR aid)
+        FormSuccess (nome,Nothing, cid) -> do 
+            aid <- runDB $ insert $ Alunos nome Nothing cid
+            redirect (PerfilR aid)
+        _ -> redirect HomeR
