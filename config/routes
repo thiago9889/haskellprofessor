@@ -5,6 +5,14 @@
 
 /    HomeR       GET
 
+/alunos/#CapituloId AlunosR GET POST
+/perfil/#AlunosId PerfilR GET POST
+/lista/alunos ListaAlunosR GET
+
+/usuario/cadastrar         CadUsuarioR      GET POST
+/perfilusuario/#UsuarioId PerfilUsuarioR   GET POST
+/lista/usuarios            ListaUsuarioR   GET
+
 /login                     LoginR           GET POST
 /logout                    LogoutR          GET
 /admin                     AdminR           GET
