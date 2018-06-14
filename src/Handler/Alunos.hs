@@ -72,3 +72,32 @@ postPerfilR :: AlunosId -> Handler Html
 postPerfilR aid = do 
     runDB $ delete aid 
     redirect ListaAlunosRs
+
+getListaAlunosR :: Handler Html
+getListaAlunosR = do
+    alunoss <- runDB $ selectList [] [Asc AlunosNome]
+    defaultLayout $ do 
+        toWidget $(luciusFile "templates/home.lucius")
+        $(whamletFile "templates/menu.hamlet")
+        [whamlet|
+            <h2>
+                Lista de Alunos
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Nome
+                        
+                        <th>
+                            
+                
+                <tbody>
+                    $forall (Entity aid alunos) <- alunoss
+                        <tr>
+                            <td>
+                                <a href=@{PerfilR aid}> 
+                                    #{alunosNome alunos}
+                            <td>
+                                <form action=@{PerfilR aid} method=post>
+                                    <input type="submit" value="Apagar">
+        |]
