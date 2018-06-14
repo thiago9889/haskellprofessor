@@ -1,0 +1,5 @@
+<h1>
+    
+<nav>    
+    <ul>
+        <li> <a href=@{ListaAlunosR}> Listar Alunos</a></li><li> <a href=@{CadUsuarioR}> Inserir Professor</a></li><li> <a href=@{ListaUsuarioR}> Listar Professores</a></li><li> <a href=@{CadNivelbR}> Inserir Nível</a></li><li> <a href=@{ListaNivelbR}> Listar Níveis</a></li><li> <a href=@{ListaCapituloR}> Listar Capitulos</a></li><li> <a href=@{LogoutR}> Logout</a></li>
