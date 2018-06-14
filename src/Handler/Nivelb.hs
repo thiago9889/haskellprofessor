@@ -29,3 +29,8 @@ getCadNivelbR = do
                 <br>
                 <input type="submit" value="OK">
         |]
+
+postPerfilNivelbR :: NivelbId -> Handler Html
+postPerfilNivelbR nid = do 
+    runDB $ delete nid 
+    redirect ListaNivelbR
