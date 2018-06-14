@@ -1,0 +1,38 @@
+{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE TypeFamilies #-}
+module Handler.Alunos where
+
+import Import
+import Text.Lucius
+import Database.Persist.Postgresql
+
+formAlunos :: Form (Text, Maybe FileInfo, Key Capitulo) 
+formAlunos = renderDivs $ (,,)
+        <$> areq textField "Nome: " Nothing
+        <*> aopt fileField FieldSettings{fsId=Just "hident4",
+                                fsLabel="Arquivo: ",
+                                fsTooltip= Nothing,
+                                fsName= Nothing,
+                                fsAttrs=[("accept","image/jpeg")]} 
+                                Nothing
+        <*> areq hiddenField "" (Just $ toSqlKey 1)
+
+getAlunosR :: CapituloId -> Handler Html
+getAlunosR cid = do 
+    (widget,enctype) <- generateFormPost formAlunos
+    defaultLayout $ do
+        toWidget $(luciusFile "templates/home.lucius")
+        $(whamletFile "templates/menu.hamlet")
+        [whamlet|
+            <h2>
+                Inserir Alunos
+            <form action=@{AlunosR cid} method=post enctype=#{enctype}>
+                ^{widget}
+                <br>
+                <br>
+                <input type="submit" value="OK">
+        |]
