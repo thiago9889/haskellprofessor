@@ -32,3 +32,7 @@ getLoginR = do
                 ^{widget}
                 <input type="submit" value="OK">
         |]
+
+autenticar :: Text -> Text -> HandlerT App IO (Maybe (Entity Usuario))
+autenticar email senha = runDB $ selectFirst [UsuarioEmail ==. email
+                                             ,UsuarioSenha ==. senha] []
