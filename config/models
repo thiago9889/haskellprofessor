@@ -1,0 +1,17 @@
+Usuario 
+    nome   Text
+    email   Text
+    senha   Text
+    deriving Show Read
+
+Nivelb
+    nome     Text
+
+Capitulo
+    numero  Text
+    nid NivelbId
+
+Alunos
+    nome Text
+    imagem  Text Maybe
+    cid CapituloId
