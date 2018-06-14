@@ -43,3 +43,56 @@ postCadNivelbR = do
             nid <- runDB $ insert niv 
             redirect (PerfilNivelbR nid)
         _ -> redirect HomeR
+
+
+getPerfilNivelbR :: NivelbId -> Handler Html
+getPerfilNivelbR nid = do 
+    niv <- runDB $ get404 nid
+    defaultLayout $ do 
+        toWidget $(luciusFile "templates/home.lucius")
+        $(whamletFile "templates/menu.hamlet")
+        [whamlet|
+            <h2> 
+                Nome: #{nivelbNome niv}
+        |]
+
+getListaNivelbR :: Handler Html
+getListaNivelbR = do
+    niveis <- runDB $ selectList [] [Asc NivelbNome]
+    defaultLayout $ do 
+        toWidget $(luciusFile "templates/home.lucius")
+        $(whamletFile "templates/menu.hamlet")
+        [whamlet|
+            <h2>
+                Lista de Níveis
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Nome
+                        
+                        <th>
+
+                        <th>
+
+                        <th>
+                            Listar Capítulo do Nível
+                            
+                            
+                
+                <tbody>
+                    $forall (Entity nid nivelb) <- niveis
+                        <tr>
+                            <td>
+                                <a href=@{PerfilNivelbR nid}> 
+                                    #{nivelbNome nivelb}
+                            <td>
+                                <form action=@{PerfilNivelbR nid} method=post>
+                                    <input type="submit" value="Apagar">
+                            <td>
+                                <a href=@{CadCapituloR nid} >
+                                    Cadastrar Capitulo
+                            <td>
+                                <a href=@{ListaCapitulonivelbR nid} >
+                                    Mostrar Capitulos
+        |]
