@@ -54,3 +54,65 @@ getCadCapituloR nid = do
                     <h2>
                         Número: #{capituloNumero cap}
                |]
+
+               getListaCapituloR :: Handler Html
+               getListaCapituloR = do
+                   capitulos <- runDB $ selectList [] [Asc CapituloNumero]
+                   defaultLayout $ do
+                       toWidget $(luciusFile "templates/home.lucius")
+                       $(whamletFile "templates/menu.hamlet")
+                       [whamlet|
+                           <h2>
+                               Lista de Capítulos
+                           <table>
+                               <thead>
+                                   <tr>
+                                       <th>
+                                           Número
+                                       <th>
+                                           Nível
+                                       <th>
+                               <tbody>
+                                   $forall (Entity cid capitulo) <- capitulos
+                                       <tr>
+                                           <td>
+                                               <a href=@{PerfilCapituloR cid}>
+                                                   #{capituloNumero capitulo}
+                                           <td>
+                                               <form action=@{PerfilCapituloR cid} method=post>
+                                                   <input type="submit" value="Apagar">
+                                           <td>
+                                               <a href=@{AlunosR cid} >
+                                                   Cadastrar Aluno
+                       |]
+
+               getListaCapitulonivelbR :: NivelbId -> Handler Html
+               getListaCapitulonivelbR nid = do
+                   capitulos <- runDB $ selectList [CapituloNid ==. nid] [Asc CapituloNumero]
+                   defaultLayout $ do
+                       toWidget $(luciusFile "templates/home.lucius")
+                       $(whamletFile "templates/menu.hamlet")
+                       [whamlet|
+                           <h2>
+                               Lista de Capítulos por Nível
+                           <table>
+                               <thead>
+                                   <tr>
+                                       <th>
+                                           Número
+                                       <th>
+
+                                       <th>
+                               <tbody>
+                                   $forall (Entity cid capitulo) <- capitulos
+                                       <tr>
+                                           <td>
+                                               <a href=@{PerfilCapituloR cid}>
+                                                   #{capituloNumero capitulo}
+                                           <td>
+                                               <form action=@{PerfilCapituloR cid} method=post>
+                                                   <input type="submit" value="Apagar">
+                                           <td>
+                                               <a href=@{AlunosR cid} >
+                                                   Cadastrar Aluno
+                       |]
