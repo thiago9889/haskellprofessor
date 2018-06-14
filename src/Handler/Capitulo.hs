@@ -28,3 +28,29 @@ getCadCapituloR nid = do
                 ^{widget}
                 <input type="submit" value="OK">
         |]
+
+        postPerfilCapituloR :: CapituloId -> Handler Html
+        postPerfilCapituloR cid = do
+            runDB $ delete cid
+            redirect ListaCapituloR
+
+        postCadCapituloR :: NivelbId -> Handler Html
+        postCadCapituloR nid = do
+            ((result,_),_) <- runFormPost formCapitulo
+            case result of
+                FormSuccess cap -> do
+                    cid <- runDB $ insert $ Capitulo(capituloNumero cap) nid
+                    redirect (PerfilCapituloR cid)
+                _ -> redirect HomeR
+
+
+        getPerfilCapituloR :: CapituloId -> Handler Html
+        getPerfilCapituloR cid = do
+            cap <- runDB $ get404 cid
+            defaultLayout $ do
+                toWidget $(luciusFile "templates/home.lucius")
+                $(whamletFile "templates/menu.hamlet")
+                [whamlet|
+                    <h2>
+                        Número: #{capituloNumero cap}
+               |]
